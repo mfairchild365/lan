@@ -5,7 +5,7 @@ class Record extends \Epoch\Record
 {
     protected $id;           //INT(32)
     protected $mac;          //VARCHAR(32)
-    protected $ip;           //VARCHAR(15)
+    protected $ip;           //VARCHAR(16)
     protected $name;         //VARCHAR(256)
     protected $date_created; //DATETIME
     protected $date_updated; //DATETIME
