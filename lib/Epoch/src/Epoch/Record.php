@@ -376,5 +376,8 @@ abstract class Record
      *
      * @return string
      */
-    abstract public static function getTable();
+    public static function getTable()
+    {
+        return false;
+    }
 }
