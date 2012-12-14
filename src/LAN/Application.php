@@ -8,10 +8,13 @@ class Application extends \Wrench\Application\Application
 
     public function onConnect(\Wrench\Connection $connection)
     {
-        $this->connections[$connection->getId()] = $connection;
+        $connection = new ConnectionContainer($connection);
 
-        echo "ID: " . $connection->getId() . PHP_EOL;
-        echo "IP: " . $connection->getIp() . PHP_EOL;
+        //Save in array
+        $this->connections[$connection->getConnection()->getId()] = $connection;
+
+        echo "IP  : " . $connection->getUser()->getIP() . PHP_EOL;
+        echo "MAC : " . $connection->getUser()->getMAC() . PHP_EOL;
 
     }
 
