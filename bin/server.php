@@ -11,7 +11,10 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
     require dirname(dirname(__FILE__)) . '/config.sample.php';
 }
 
-$server = new \Wrench\Server('ws://192.168.1.131:8000/', array(
+//Get the IP address of the server (UNIX ONLY... FIRST ETHERNET PORT ONLY) TODO: make configurable
+$ip = str_replace("\n","",shell_exec("ifconfig eth0 | grep 'inet addr' | awk -F':' {'print $2'} | awk -F' ' {'print $1'}"));
+
+$server = new \Wrench\Server('ws://' . $ip . ':8000/', array(
         'allowed_origins' => array(
             'mysite.localhost'
         ),
