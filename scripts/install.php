@@ -16,6 +16,10 @@ function exec_sql($db, $sql, $message, $fail_ok = false)
                 if ($result = $db->store_result()) {
                     $result->free();
                 }
+
+                if (!$db->more_results()) {
+                    break;
+                }
             } while ($db->next_result());
         } else {
             echo "Query Failed: " . $db->error . PHP_EOL;
