@@ -11,17 +11,14 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
     require dirname(dirname(__FILE__)) . '/config.sample.php';
 }
 
-//Get the IP address of the server (UNIX ONLY... FIRST ETHERNET PORT ONLY) TODO: make configurable
-$ip = str_replace("\n","",shell_exec("ifconfig eth0 | grep 'inet addr' | awk -F':' {'print $2'} | awk -F' ' {'print $1'}"));
-
-$server = new \Wrench\Server('ws://' . $ip . ':8000/', array(
+$server = new \Wrench\Server('ws://' . \LAN\Config::get('SERVER_ADDR') . ':' . \LAN\Config::get('SERVER_PORT') . '/', array(
         'allowed_origins' => array(
             'mysite.localhost'
         ),
     )
 );
 
-$server->registerApplication('lan', new \LAN\Application());
+$server->registerApplication(\LAN\Config::get('APPLICATION_NAME'), new \LAN\Application());
 
 $server->run();
 
