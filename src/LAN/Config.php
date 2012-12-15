@@ -1,13 +1,22 @@
 <?php
 namespace LAN;
-
+Config::set('DB_HOST'     , 'localhost');
+Config::set('DB_USER'     , 'user');
+Config::set('DB_PASSWORD' , 'password');
+Config::set('DB_NAME'     , 'lan');
 class Config
 {
     protected static $data = array(
+        //SERVER RELATED SETTINGS
         'SERVER_ADDR'      => false,  //SERVER ADDRESS.  (IE: 192.168.1.5) (Leave false to auto-detect)
         'SERVER_PORT'      => '8000', //SERVER Port
         'SERVER_ETH'       => 0,      //SERVER ETHERNET PORT (used when auto detecting IP address)
         'APPLICATION_NAME' => 'lan',  //APPLICATION NAME (ie 192.168.1.5:8000/APPLICATION_NAME)
+        //DB RELATED SETTINGS
+        'DB_HOST'          => false,  //DATABASE HOST
+        'DB_USER'          => false,  //DATABASE USER
+        'DB_PASSWORD'      => false,  //DATABASE PASSWORD
+        'DB_NAME'          => false,  //DATABASE NAME
     );
 
     private function __construct()
