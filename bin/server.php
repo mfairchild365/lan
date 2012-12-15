@@ -11,12 +11,7 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
     require dirname(dirname(__FILE__)) . '/config.sample.php';
 }
 
-$server = new \Wrench\Server('ws://' . \LAN\Config::get('SERVER_ADDR') . ':' . \LAN\Config::get('SERVER_PORT') . '/', array(
-        'allowed_origins' => array(
-            'mysite.localhost'
-        ),
-    )
-);
+$server = new \Wrench\Server('ws://' . \LAN\Config::get('SERVER_ADDR') . ':' . \LAN\Config::get('SERVER_PORT') . '/');
 
 $server->registerApplication(\LAN\Config::get('APPLICATION_NAME'), new \LAN\Application());
 
