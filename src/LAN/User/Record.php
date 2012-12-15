@@ -10,6 +10,7 @@ class Record extends \Epoch\Record
     protected $date_created; //DATETIME
     protected $date_updated; //DATETIME
     protected $status;       //ENUM('ONLINE', 'OFFLINE')
+    protected $host_name;    //VARCHAR(256)
 
     public static function getByID($id)
     {
@@ -43,6 +44,7 @@ class Record extends \Epoch\Record
         try {
             $record->setMAC(\LAN\Util::getMac($connection->getIp()));
             $record->setIP($connection->getIp());
+            $record->setHostName(gethostbyaddr($connection->getIp()));
             //TODO: $record->setDateCreated();
         } catch (\Exception $e) {
 
@@ -86,6 +88,11 @@ class Record extends \Epoch\Record
         return $this->status;
     }
 
+    function getHostName()
+    {
+        return $this->host_name;
+    }
+
     function setMAC($mac)
     {
         $this->mac = $mac;
@@ -114,5 +121,10 @@ class Record extends \Epoch\Record
     function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    function setHostName($name)
+    {
+        $this->host_name = $name;
     }
 }
