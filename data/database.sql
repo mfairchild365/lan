@@ -13,7 +13,7 @@ CREATE  TABLE IF NOT EXISTS `lan`.`users` (
   `name` VARCHAR(256) NOT NULL ,
   `date_created` DATETIME NOT NULL ,
   `date_edited` DATETIME NULL ,
-  `status` ENUM('ONLINE', 'OFFLINE') NULL DEFAULT OFFLINE ,
+  `status` ENUM('ONLINE', 'OFFLINE') NULL DEFAULT "OFFLINE" ,
   `ip` VARCHAR(32) NOT NULL ,
   `mac` VARCHAR(16) NOT NULL ,
   `host_name` VARCHAR(256) NULL ,
