@@ -1,0 +1,12 @@
+{
+    "autoload": {
+        "psr-0": {
+            "LAN": "src",
+            "DB": "vendor/mfairchild365",
+            "RegExpRouter": "vendor/mfairchild365"
+        }
+    },
+    "require": {
+        "cboden/Ratchet": "0.2.*"
+    }
+}
