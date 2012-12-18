@@ -11,7 +11,7 @@
  */
 namespace DB;
 
-abstract class Record
+abstract class Connection
 {
     protected static $db;  //The database
 
