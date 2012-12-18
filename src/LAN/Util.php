@@ -33,11 +33,16 @@ class Util
 
         if (!$db) {
             $db = new \mysqli(Config::get('DB_HOST'), Config::get('DB_USER'), Config::get('DB_PASSWORD'), Config::get('DB_NAME'));
+
             if (mysqli_connect_error()) {
                 throw new \Exception('Database connection error (' . mysqli_connect_errno() . ') '
                     . mysqli_connect_error());
             }
+
             $db->set_charset('utf8');
+
+            //Set DB connection
+            \DB\Connection::setDB($db);
         }
 
         return $db;
