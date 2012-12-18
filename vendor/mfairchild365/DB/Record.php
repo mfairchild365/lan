@@ -5,8 +5,9 @@
  * PHP version 5
  * 
  * @category  Publishing
- * @package   Epoch
+ * @package   DB
  * @author    Brett Bieber <brett.bieber@gmail.com>
+ * @author    Michael Fairchild <mfairchild365@gmail.com>
  * @copyright 2010 Regents of the University of Nebraska
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
  */
@@ -208,7 +209,7 @@ abstract class Record
      * @param int    $id    The primary key/ID value
      * @param string $field The field that holds the primary key
      * 
-     * @return false | \Epoch\Record
+     * @return false | \DB\Record
      */
     public static function getRecordByID($table, $id, $field = 'id')
     {
@@ -310,7 +311,7 @@ abstract class Record
      */
     public static function getDB()
     {
-        return \Epoch\Controller::getDB();
+        return Connection::getDB();
     }
 
     /**

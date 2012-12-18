@@ -1,4 +1,15 @@
 <?php
+/**
+ * Simple Active Record List implementation
+ *
+ * PHP version 5
+ *
+ * @category  Publishing
+ * @package   DB
+ * @author    Michael Fairchild <mfairchild365@gmail.com>
+ * @copyright 2010 Regents of the University of Nebraska
+ * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
+ */
 namespace DB;
 
 abstract class RecordList extends \LimitIterator implements \Countable
@@ -71,7 +82,7 @@ abstract class RecordList extends \LimitIterator implements \Countable
             throw new exception("options['sql'] was not set!", 500);
         }
         
-        $mysqli           = \Epoch\Controller::getDB();
+        $mysqli           = Connection::getDB();
         $options['array'] = array();
         
         if ($result = $mysqli->query($options['sql'])) {
@@ -93,7 +104,7 @@ abstract class RecordList extends \LimitIterator implements \Countable
     
     public static function escapeString($string)
     {
-        $mysqli = \Epoch\Controller::getDB();
+        $mysqli = Connection::getDB();
         return $mysqli->escape_string($string);
     }
     
