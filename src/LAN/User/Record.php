@@ -1,7 +1,7 @@
 <?php
 namespace LAN\User;
 
-class Record extends \Epoch\Record
+class Record extends \DB\Record
 {
     protected $id;           //INT(32)
     protected $mac;          //VARCHAR(32)
@@ -32,19 +32,19 @@ class Record extends \Epoch\Record
         return 'users';
     }
 
-    public static function getUser(\Wrench\Connection $connection)
+    public static function getUser(\Ratchet\ConnectionInterface $connection)
     {
         return self::createNewUser($connection);
     }
 
-    public static function createNewUser(\Wrench\Connection $connection)
+    public static function createNewUser(\Ratchet\ConnectionInterface $connection)
     {
         $record = new self();
 
         try {
-            $record->setMAC(\LAN\Util::getMac($connection->getIp()));
-            $record->setIP($connection->getIp());
-            $record->setHostName(gethostbyaddr($connection->getIp()));
+            $record->setMAC(\LAN\Util::getMac($connection->remoteAddress));
+            $record->setIP($connection->remoteAddress);
+            $record->setHostName(gethostbyaddr($connection->remoteAddress));
             //TODO: $record->setDateCreated();
         } catch (\Exception $e) {
 

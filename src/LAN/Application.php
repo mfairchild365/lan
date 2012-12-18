@@ -1,37 +1,53 @@
 <?php
 namespace LAN;
 
-class Application extends \Wrench\Application\Application
-{
+use Ratchet\MessageComponentInterface;
+use Ratchet\ConnectionInterface;
+
+class Application implements MessageComponentInterface {
     protected $connections = array();
 
-
-    public function onConnect(\Wrench\Connection $connection)
-    {
+    public function onOpen(ConnectionInterface $connection) {
         $connection = new ConnectionContainer($connection);
 
         //Save in array
-        $this->connections[$connection->getConnection()->getId()] = $connection;
+        $this->connections[$connection->getConnection()->resourceId] = $connection;
 
+        //Display connection on server.
+        echo "--------NEW CONNECTION--------" . PHP_EOL;
+        echo "ID  : " . $connection->getConnection()->resourceId . PHP_EOL;
         echo "IP  : " . $connection->getUser()->getIP() . PHP_EOL;
         echo "MAC : " . $connection->getUser()->getMAC() . PHP_EOL;
 
+        // Store the new connection to send messages to later
+        //$this->clients->attach($connection);
     }
 
-    public function onDisconnect(\Wrench\Connection $connection)
-    {
-        echo "disconnected" . PHP_EOL;
-        unset($this->connections[$connection->getId()]);
+    public function onMessage(ConnectionInterface $connection, $msg) {
+        echo "--------ACTION--------" . PHP_EOL;
+        echo "IP  : " . $connection->getUser()->getIP() . PHP_EOL;
+
+        foreach ($this->clients as $client) {
+            if ($connection !== $client) {
+                // The sender is not the receiver, send to each client connected
+                $client->send($msg);
+            }
+        }
     }
 
-    public function onUpdate()
-    {
-        //echo "Update" . PHP_EOL;
+    public function onClose(ConnectionInterface $connection) {
+        echo "--------CONNECTION CLOSED--------" . PHP_EOL;
+        echo "IP  : " . $connection->getUser()->getIP() . PHP_EOL;
+
+        // The connection is closed, remove it, as we can no longer send it messages
+        unset($this->connections[$connection->resourceId]);
     }
 
-    public function onData($data, $connection)
-    {
-        echo "Data" . PHP_EOL;
-        print_r($data);
+    public function onError(ConnectionInterface $connection, \Exception $e) {
+        echo "--------ERROR--------" . PHP_EOL;
+        echo "IP  : " . $connection->getUser()->getIP() . PHP_EOL;
+        echo "error: " . $e->getMessage() . PHP_EOL;
+
+        $connection->close();
     }
 }

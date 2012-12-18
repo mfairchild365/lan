@@ -6,7 +6,7 @@ class ConnectionContainer
     protected $user        = false; // \LAN\User\Record   object
     protected $connections = false; // \Wrench\Connection object
 
-    function __construct(\Wrench\Connection $connection)
+    function __construct(\Ratchet\ConnectionInterface $connection)
     {
         $this->setConnection($connection);
     }
@@ -21,7 +21,7 @@ class ConnectionContainer
         return $this->user;
     }
 
-    function setConnection(\Wrench\Connection $connection)
+    function setConnection(\Ratchet\ConnectionInterface $connection)
     {
         $this->connection = $connection;
 
