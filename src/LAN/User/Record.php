@@ -14,12 +14,12 @@ class Record extends \DB\Record implements \LAN\Renderable
 
     public static function getByID($id)
     {
-        return self::getByAnyField('\UNL\VisitorChat\User\Record', 'id', (int)$id);
+        return self::getByAnyField(__CLASS__, 'id', (int)$id);
     }
 
     public static function getByMAC($mac)
     {
-        return self::getByAnyField('\UNL\VisitorChat\User\Record', 'mac', $mac);
+        return self::getByAnyField(__CLASS__, 'mac', $mac);
     }
 
     function keys()
@@ -49,6 +49,10 @@ class Record extends \DB\Record implements \LAN\Renderable
 
     public static function getUser(\Ratchet\ConnectionInterface $connection)
     {
+        if ($record = self::getByMAC(\LAN\Util::getMac($connection->remoteAddress))) {
+            return $record;
+        }
+
         return self::createNewUser($connection);
     }
 
@@ -149,6 +153,6 @@ class Record extends \DB\Record implements \LAN\Renderable
         //Don't send the mac address
         unset($data['mac']);
 
-        return json_encode($data);
+        return $data;
     }
 }
