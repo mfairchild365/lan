@@ -25,7 +25,7 @@ class Application implements MessageComponentInterface {
         echo "MAC : " . $connection->getUser()->getMAC() . PHP_EOL;
 
         if ($this->getUserConnectionCount($connection->getUser()->getID()) == 1) {
-            $this->sendToAll("NEW USER: " . $this->renderObject($connection->getUser()));
+            $this->sendToAll("USER_CONNECTED", $connection->getUser());
         }
     }
 
@@ -49,7 +49,7 @@ class Application implements MessageComponentInterface {
             echo "IP  : " . $this->connections[$connection->resourceId]->getUser()->getIP() . PHP_EOL;
 
             if ($this->getUserConnectionCount($this->connections[$connection->resourceId]->getUser()->getID()) == 1) {
-                $this->sendToAll("LOGOUT: " . $this->renderObject($this->connections[$connection->resourceId]->getUser()));
+                $this->sendToAll("USER_DISCONNECTED", $this->connections[$connection->resourceId]->getUser());
             }
         }
 
@@ -66,7 +66,7 @@ class Application implements MessageComponentInterface {
         }
 
         if ($e instanceof \Lan\Renderable) {
-            $connection->send($this->renderObject(($e)));
+            self::sendMessageToClient($connection, "ERROR", $e);
         }
 
         echo "error: " . $e->getMessage() . PHP_EOL;
@@ -74,23 +74,11 @@ class Application implements MessageComponentInterface {
         $connection->close();
     }
 
-    public function sendToAll($message)
+    public function sendToAll($action, $data)
     {
         foreach ($this->connections as $connection) {
-            $connection->getConnection()->send($message);
+            $connection->send($action, $data);
         }
-    }
-
-    public function renderObject($object)
-    {
-        if (!$object instanceof \Lan\Renderable) {
-            throw new \Exception("Unable to render Object");
-        }
-
-        $array = array();
-        $array[get_class($object)] = $object->render();
-
-        return json_encode($array);
     }
 
     public function getUserConnectionCount($userID)
@@ -104,5 +92,63 @@ class Application implements MessageComponentInterface {
         }
 
         return $count;
+    }
+
+    /**
+     * Sends a message to the client in JSON form.
+     *
+     * Possible actions include
+     *   - USER_INFORMATION  - Detailed information about the logged in user (sent on onConnect)
+     *   - USER_CONNECTED    - Sent to all users when a user is connected.
+     *   - USER_DISCONNECTED - Sent to all users when a user is disconnected.
+     *   - MESSAGE_RECEIVED  - Sent to all users when a new message is received.
+     *   - ERROR             - Information about an error.
+     *
+     * example JSON output:
+     * {
+     *     "action": "USER_CONNECTED",
+     *     "data": {
+     *         "LAN\\User\\Record": {
+     *             "id": "1",
+     *             "ip": "192.168.1.139",
+     *             "name": "UNKNOWN",
+     *             "date_created": "2012-12-20 15:34:13",
+     *             "date_edited": "2012-12-20 15:34:13",
+     *             "status": null,
+     *             "host_name": "GHETO_BLASTER"
+     *         }
+     *     }
+     * }
+     *
+     *
+     * @param \Ratchet\ConnectionInterface $connection
+     * @param $action
+     * @param $data
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
+    public static function sendMessageToClient(\Ratchet\ConnectionInterface $connection, $action, $data)
+    {
+        if(!in_array($action, array('USER_INFORMATION', 'USER_CONNECTED', 'USER_DISCONNECTED', 'MESSAGE_RECEIVED', 'ERROR'))) {
+            throw new Exception("Unknown Action Type: " . $action);
+        }
+
+        $message = array();
+
+        $message['action'] = $action;
+
+        //Render the data if we can.
+        if ($data instanceof \Lan\Renderable) {
+            $newData                   = array();
+            $newData[get_class($data)] = $data->render();
+
+            $data = $newData;
+        }
+
+        $message['data'] = $data;
+
+        $connection->send(json_encode($message));
     }
 }
