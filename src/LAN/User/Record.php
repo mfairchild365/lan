@@ -1,7 +1,7 @@
 <?php
 namespace LAN\User;
 
-class Record extends \DB\Record
+class Record extends \DB\Record implements \LAN\Renderable
 {
     protected $id;           //INT(32)
     protected $mac;          //VARCHAR(32)
@@ -139,5 +139,16 @@ class Record extends \DB\Record
     function setHostName($name)
     {
         $this->host_name = $name;
+    }
+
+    function render()
+    {
+        //Convert this object to an array
+        $data = $this->toArray();
+
+        //Don't send the mac address
+        unset($data['mac']);
+
+        return json_encode($data);
     }
 }

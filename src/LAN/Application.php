@@ -26,7 +26,7 @@ class Application implements MessageComponentInterface {
 
         // Store the new connection to send messages to later
         foreach ($this->connections as $tmp) {
-            $tmp->getConnection()->send("NEW USER: " . $connection->getConnection()->resourceId);
+            $tmp->getConnection()->send("NEW USER: " . $connection->getUser()->render());
         }
     }
 
