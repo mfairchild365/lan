@@ -25,7 +25,7 @@ class Application implements MessageComponentInterface {
         echo "MAC : " . $connection->getUser()->getMAC() . PHP_EOL;
 
         // Store the new connection to send messages to later
-        $this->sendToAll("NEW USER: " . json_encode($connection->getUser()->render()));
+        $this->sendToAll("NEW USER: " . $this->renderObject($connection->getUser()));
     }
 
     public function onMessage(ConnectionInterface $connection, $msg) {
@@ -42,7 +42,12 @@ class Application implements MessageComponentInterface {
 
     public function onClose(ConnectionInterface $connection) {
         echo "--------CONNECTION CLOSED--------" . PHP_EOL;
-        echo "IP  : " . $this->connections[$connection->resourceId]->getUser()->getIP() . PHP_EOL;
+        var_dump($connection->resourceId);
+
+        //May not be a set connection if an error happened during connection.
+        if (isset($this->connections[$connection->resourceId])) {
+            echo "IP  : " . $this->connections[$connection->resourceId]->getUser()->getIP() . PHP_EOL;
+        }
 
         // The connection is closed, remove it, as we can no longer send it messages
         unset($this->connections[$connection->resourceId]);
@@ -51,7 +56,15 @@ class Application implements MessageComponentInterface {
     public function onError(ConnectionInterface $connection, \Exception $e) {
         echo "--------ERROR--------" . PHP_EOL;
 
-        echo "IP  : " . $this->connections[$connection->resourceId]->getUser()->getIP() . PHP_EOL;
+        //May not be a set connection if an error happened during connection.
+        if (isset($this->connections[$connection->resourceId])) {
+            echo "IP  : " . $this->connections[$connection->resourceId]->getUser()->getIP() . PHP_EOL;
+        }
+
+        if ($e instanceof \Lan\Renderable) {
+            $connection->send($this->renderObject(($e)));
+        }
+
         echo "error: " . $e->getMessage() . PHP_EOL;
 
         $connection->close();
@@ -62,5 +75,17 @@ class Application implements MessageComponentInterface {
         foreach ($this->connections as $connection) {
             $connection->getConnection()->send($message);
         }
+    }
+
+    public function renderObject($object)
+    {
+        if (!$object instanceof \Lan\Renderable) {
+            throw new \Exception("Unable to render Object");
+        }
+
+        $array = array();
+        $array[get_class($object)] = $object->render();
+
+        return json_encode($array);
     }
 }
