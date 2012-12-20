@@ -7,16 +7,30 @@ class Util
 
     public static function getMAC($ip)
     {
+        //Regex to get MAC address
+        $regex = '/([0-9a-fA-F]{2}[:-]){5}([0-9a-fA-F]{2})/';
+
         //run the external command, break output into lines
         $arp   = `arp -a $ip`;
 
         $matches = array();
 
-        preg_match('/([0-9a-fA-F]{2}[:-]){5}([0-9a-fA-F]{2})/', $arp, $matches);
+        preg_match($regex, $arp, $matches);
 
         //Return the MAC address if found...
         if (isset($matches[0])) {
             return $matches[0];
+        }
+
+        if ($ip == Config::get('SERVER_ADDR')) {
+            $ifconifg = shell_exec('ifconfig | grep eth' . Config::get('SERVER_ETH'));
+
+            preg_match($regex, $ifconifg, $matches);
+
+            //Return the MAC address if found...
+            if (isset($matches[0])) {
+                return $matches[0];
+            }
         }
 
         throw new Exception('Unable to find MAC address', 500);
