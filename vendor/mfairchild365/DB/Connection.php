@@ -13,7 +13,7 @@ namespace DB;
 
 abstract class Connection
 {
-    protected static $db;  //The database
+    protected static $db = false;  //The database
 
     private function __construct() {
         //Private so that it can't be instantiated (singleton)
