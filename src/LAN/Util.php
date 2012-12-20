@@ -3,6 +3,8 @@ namespace LAN;
 
 class Util
 {
+    protected static $db = false;
+
     public static function getMAC($ip)
     {
         //run the external command, break output into lines
@@ -20,6 +22,21 @@ class Util
         return false;
     }
 
+    public static function setDB($host, $user, $password, $database)
+    {
+        self::$db = new \mysqli($host, $user, $password, $database);
+
+        if (mysqli_connect_error()) {
+            throw new \Exception('Database connection error (' . mysqli_connect_errno() . ') '
+                . mysqli_connect_error());
+        }
+
+        self::$db->set_charset('utf8');
+
+        //Set DB connection
+        \DB\Connection::setDB(self::$db);
+    }
+
     /**
      * Connect to the database and return it
      *
@@ -28,23 +45,20 @@ class Util
      */
     public static function getDB()
     {
-        //Reduce connections by saving the current connection and reusing it.
-        static $db = false;
-
-        if (!$db) {
-            $db = new \mysqli(Config::get('DB_HOST'), Config::get('DB_USER'), Config::get('DB_PASSWORD'), Config::get('DB_NAME'));
-
-            if (mysqli_connect_error()) {
-                throw new \Exception('Database connection error (' . mysqli_connect_errno() . ') '
-                    . mysqli_connect_error());
-            }
-
-            $db->set_charset('utf8');
-
-            //Set DB connection
-            \DB\Connection::setDB($db);
+        //If it isn't set yet, try to set it.
+        if (!self::$db) {
+            self::setDB(Config::get('DB_HOST'), Config::get('DB_USER'), Config::get('DB_PASSWORD'), Config::get('DB_NAME'));
         }
 
-        return $db;
+        return self::$db;
+    }
+
+    public static function epochToDateTime($time = false)
+    {
+        if (!$time) {
+            $time = time();
+        }
+
+        return date("Y-m-d H:i:s", $time);
     }
 }
