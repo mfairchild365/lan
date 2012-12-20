@@ -19,7 +19,7 @@ class Util
             return $matches[0];
         }
 
-        return false;
+        throw new \Exception('Unable to create user: Unknown MAC address', 500);
     }
 
     public static function setDB($host, $user, $password, $database)
