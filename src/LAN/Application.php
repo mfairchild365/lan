@@ -7,6 +7,11 @@ use Ratchet\ConnectionInterface;
 class Application implements MessageComponentInterface {
     protected $connections = array();
 
+    public function __construct()
+    {
+        Util::setDB(Config::get('DB_HOST'), Config::get('DB_USER'), Config::get('DB_PASSWORD'), Config::get('DB_NAME'));
+    }
+
     public function onOpen(ConnectionInterface $connection) {
         $connection = new ConnectionContainer($connection);
 
@@ -20,12 +25,14 @@ class Application implements MessageComponentInterface {
         echo "MAC : " . $connection->getUser()->getMAC() . PHP_EOL;
 
         // Store the new connection to send messages to later
-        //$this->clients->attach($connection);
+        foreach ($this->connections as $tmp) {
+            $tmp->getConnection()->send("NEW USER: " . $connection->getConnection()->resourceId);
+        }
     }
 
     public function onMessage(ConnectionInterface $connection, $msg) {
         echo "--------ACTION--------" . PHP_EOL;
-        echo "IP  : " . $connection->getUser()->getIP() . PHP_EOL;
+        echo "IP  : " . $this->connections[$connection->resourceId]->getUser()->getIP() . PHP_EOL;
 
         foreach ($this->clients as $client) {
             if ($connection !== $client) {
@@ -37,7 +44,7 @@ class Application implements MessageComponentInterface {
 
     public function onClose(ConnectionInterface $connection) {
         echo "--------CONNECTION CLOSED--------" . PHP_EOL;
-        echo "IP  : " . $connection->getUser()->getIP() . PHP_EOL;
+        echo "IP  : " . $this->connections[$connection->resourceId]->getUser()->getIP() . PHP_EOL;
 
         // The connection is closed, remove it, as we can no longer send it messages
         unset($this->connections[$connection->resourceId]);
@@ -45,7 +52,8 @@ class Application implements MessageComponentInterface {
 
     public function onError(ConnectionInterface $connection, \Exception $e) {
         echo "--------ERROR--------" . PHP_EOL;
-        echo "IP  : " . $connection->getUser()->getIP() . PHP_EOL;
+
+        echo "IP  : " . $this->connections[$connection->resourceId]->getUser()->getIP() . PHP_EOL;
         echo "error: " . $e->getMessage() . PHP_EOL;
 
         $connection->close();
