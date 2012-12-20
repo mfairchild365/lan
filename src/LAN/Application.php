@@ -24,8 +24,9 @@ class Application implements MessageComponentInterface {
         echo "IP  : " . $connection->getUser()->getIP() . PHP_EOL;
         echo "MAC : " . $connection->getUser()->getMAC() . PHP_EOL;
 
-        // Store the new connection to send messages to later
-        $this->sendToAll("NEW USER: " . $this->renderObject($connection->getUser()));
+        if ($this->getUserConnectionCount($connection->getUser()->getID()) == 1) {
+            $this->sendToAll("NEW USER: " . $this->renderObject($connection->getUser()));
+        }
     }
 
     public function onMessage(ConnectionInterface $connection, $msg) {
@@ -42,11 +43,14 @@ class Application implements MessageComponentInterface {
 
     public function onClose(ConnectionInterface $connection) {
         echo "--------CONNECTION CLOSED--------" . PHP_EOL;
-        var_dump($connection->resourceId);
 
         //May not be a set connection if an error happened during connection.
         if (isset($this->connections[$connection->resourceId])) {
             echo "IP  : " . $this->connections[$connection->resourceId]->getUser()->getIP() . PHP_EOL;
+
+            if ($this->getUserConnectionCount($this->connections[$connection->resourceId]->getUser()->getID()) == 1) {
+                $this->sendToAll("LOGOUT: " . $this->renderObject($this->connections[$connection->resourceId]->getUser()));
+            }
         }
 
         // The connection is closed, remove it, as we can no longer send it messages
@@ -87,5 +91,18 @@ class Application implements MessageComponentInterface {
         $array[get_class($object)] = $object->render();
 
         return json_encode($array);
+    }
+
+    public function getUserConnectionCount($userID)
+    {
+        $count = 0;
+
+        foreach ($this->connections as $connection) {
+            if ($connection->getUser()->getID() == $userID) {
+                $count++;
+            }
+        }
+
+        return $count;
     }
 }
