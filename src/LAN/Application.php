@@ -25,9 +25,7 @@ class Application implements MessageComponentInterface {
         echo "MAC : " . $connection->getUser()->getMAC() . PHP_EOL;
 
         // Store the new connection to send messages to later
-        foreach ($this->connections as $tmp) {
-            $tmp->getConnection()->send("NEW USER: " . $connection->getUser()->render());
-        }
+        $this->sendToAll("NEW USER: " . json_encode($connection->getUser()->render()));
     }
 
     public function onMessage(ConnectionInterface $connection, $msg) {
@@ -57,5 +55,12 @@ class Application implements MessageComponentInterface {
         echo "error: " . $e->getMessage() . PHP_EOL;
 
         $connection->close();
+    }
+
+    public function sendToAll($message)
+    {
+        foreach ($this->connections as $connection) {
+            $connection->getConnection()->send($message);
+        }
     }
 }
