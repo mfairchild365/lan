@@ -8,7 +8,7 @@ class Record extends \DB\Record
     protected $ip;           //VARCHAR(16)
     protected $name;         //VARCHAR(256)
     protected $date_created; //DATETIME
-    protected $date_updated; //DATETIME
+    protected $date_edited; //DATETIME
     protected $status;       //ENUM('ONLINE', 'OFFLINE')
     protected $host_name;    //VARCHAR(256)
 
@@ -32,6 +32,21 @@ class Record extends \DB\Record
         return 'users';
     }
 
+    function insert()
+    {
+        $this->date_created = \LAN\Util::epochToDateTime();
+        $this->date_edited  = \LAN\Util::epochToDateTime();
+
+        return parent::insert();
+    }
+
+    function update()
+    {
+        $this->date_updated = \LAN\Util::epochToDateTime();
+
+        return parent::update();
+    }
+
     public static function getUser(\Ratchet\ConnectionInterface $connection)
     {
         return self::createNewUser($connection);
@@ -41,14 +56,12 @@ class Record extends \DB\Record
     {
         $record = new self();
 
-        try {
-            $record->setMAC(\LAN\Util::getMac($connection->remoteAddress));
-            $record->setIP($connection->remoteAddress);
-            $record->setHostName(gethostbyaddr($connection->remoteAddress));
-            //TODO: $record->setDateCreated();
-        } catch (\Exception $e) {
+        $record->setMAC(\LAN\Util::getMac($connection->remoteAddress));
+        $record->setIP($connection->remoteAddress);
+        $record->setHostName(gethostbyaddr($connection->remoteAddress));
+        $record->setName("UNKNOWN");
 
-        }
+        $record->save();
 
         return $record;
     }
