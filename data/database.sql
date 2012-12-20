@@ -10,17 +10,18 @@ USE `lan` ;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `lan`.`users` (
   `id` INT NOT NULL AUTO_INCREMENT ,
-  `name` VARCHAR(256) NOT NULL ,
+  `name` VARCHAR(256) NULL ,
   `date_created` DATETIME NOT NULL ,
   `date_edited` DATETIME NULL ,
   `status` ENUM('ONLINE', 'OFFLINE') NULL DEFAULT "OFFLINE" ,
   `ip` VARCHAR(32) NOT NULL ,
-  `mac` VARCHAR(16) NOT NULL ,
+  `mac` VARCHAR(32) NOT NULL ,
   `host_name` VARCHAR(256) NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `mac` (`mac` ASC) ,
   INDEX `date_edited` (`date_edited` ASC) ,
-  INDEX `date_created` (`date_created` ASC) )
+  INDEX `date_created` (`date_created` ASC) ,
+  UNIQUE INDEX `mac_UNIQUE` (`mac` ASC) )
 ENGINE = InnoDB;
 
 
