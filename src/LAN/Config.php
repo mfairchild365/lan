@@ -12,6 +12,8 @@ class Config
         'SERVER_PORT'      => '8000', //SERVER Port
         'SERVER_ETH'       => 0,      //SERVER ETHERNET PORT (used when auto detecting IP address)
         'APPLICATION_NAME' => 'lan',  //APPLICATION NAME (ie 192.168.1.5:8000/APPLICATION_NAME)
+        'WWW_PATH'         => '/',    //Path to the www directory from the server's IP address. (IE: '/lan/www/') (TRAILING SLASH IS IMPORTANT)
+
         //DB RELATED SETTINGS
         'DB_HOST'          => false,  //DATABASE HOST
         'DB_USER'          => false,  //DATABASE USER

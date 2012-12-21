@@ -75,4 +75,9 @@ class Util
 
         return date("Y-m-d H:i:s", $time);
     }
+
+    public static function getURL()
+    {
+        return "http://" . Config::get('SERVER_ADDR') . Config::get('WWW_PATH');
+    }
 }
