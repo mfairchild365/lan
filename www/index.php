@@ -32,8 +32,12 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
         <div class="navbar">
             <div class="navbar-inner">
                 <a class="brand" href="#">LAN</a>
+
                 <ul class="nav">
                     <li class="active"><a href="#">Home</a></li>
+                </ul>
+                <ul class='nav pull-right'>
+                    <li><a href='#'><span id='connection-status' class='badge badge-important'>Offline</span></a></li>
                 </ul>
             </div>
         </div>

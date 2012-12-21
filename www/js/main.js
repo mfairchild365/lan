@@ -27,6 +27,9 @@ var app = {
     onOpen: function(event)
     {
         console.log("Connection established!");
+        $("#connection-status").removeClass('badge-important');
+        $("#connection-status").addClass('badge-success');
+        $("#connection-status").html("Online");
     },
 
     onMessage: function(event)
