@@ -42,7 +42,7 @@ class Record extends \DB\Record implements \LAN\Renderable
 
     function update()
     {
-        $this->date_updated = \LAN\Util::epochToDateTime();
+        $this->date_edited = \LAN\Util::epochToDateTime();
 
         return parent::update();
     }
