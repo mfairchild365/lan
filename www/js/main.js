@@ -43,6 +43,9 @@ var app = {
         switch(data['action']) {
             case 'USER_CONNECTED':
                 app.onUserConnected(data['data']);
+                break;
+            case 'USER_DISCONNECTED':
+                app.onUserDisconnected(data['data']);
         }
     },
 
@@ -65,6 +68,11 @@ var app = {
         app.addUser(data['LAN\\User\\Record']);
     },
 
+    onUserDisconnected: function(data)
+    {
+        app.removeUser(data['LAN\\User\\Record']);
+    },
+
     addUser: function(user)
     {
         var elementId = 'LAN-User-Record-' + user['id'];
@@ -83,5 +91,18 @@ var app = {
                    "</li>";
 
         $('#user-list').append(html);
+    },
+
+    removeUser: function(user)
+    {
+        var elementId = 'LAN-User-Record-' + user['id'];
+
+        //Only append if it does not already exist
+        if ($('#' + elementId).length == 0) {
+            return;
+        }
+
+        $('#' + elementId).remove();
     }
+
 };

@@ -63,8 +63,14 @@ class Application implements MessageComponentInterface {
             $this->connections[$connection->resourceId]->getUser()->save();
         }
 
+        $connection = $this->connections[$connection->resourceId];
+
         // The connection is closed, remove it, as we can no longer send it messages
-        unset($this->connections[$connection->resourceId]);
+        unset($this->connections[$connection->getConnection()->resourceId]);
+
+        //TODO: Send USER_DISCONNECTED action to all clients.
+
+        $this->sendToAll("USER_DISCONNECTED", $connection->getUser());
     }
 
     public function onError(ConnectionInterface $connection, \Exception $e) {
