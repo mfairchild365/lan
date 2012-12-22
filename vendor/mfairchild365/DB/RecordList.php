@@ -25,7 +25,10 @@ abstract class RecordList extends \LimitIterator implements \Countable
      *     $options['itemClass'] the class of each item in the list.
      * @return array
      */
-    abstract function getDefaultOptions();
+    static function getDefaultOptions()
+    {
+        return array();
+    }
     
     /*
      * @param $options Requires Listclass and ItemClass to work properlly.
