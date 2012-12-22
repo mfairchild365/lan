@@ -49,6 +49,10 @@ var app = {
     onClose: function(event)
     {
         console.log(event.data);
+
+        $("#connection-status").removeClass('badge-success');
+        $("#connection-status").addClass('badge-important');
+        $("#connection-status").html("Offline");
     },
 
     onError: function(event)
