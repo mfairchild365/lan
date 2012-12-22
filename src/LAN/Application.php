@@ -18,6 +18,10 @@ class Application implements MessageComponentInterface {
         //Save in array
         $this->connections[$connection->getConnection()->resourceId] = $connection;
 
+        //Set as online.
+        $this->connections[$connection->getConnection()->resourceId]->setStatus("ONLINE");
+        $this->connections[$connection->getConnection()->resourceId]->save();
+
         //Display connection on server.
         echo "--------NEW CONNECTION--------" . PHP_EOL;
         echo "ID  : " . $connection->getConnection()->resourceId . PHP_EOL;
@@ -51,6 +55,10 @@ class Application implements MessageComponentInterface {
             if ($this->getUserConnectionCount($this->connections[$connection->resourceId]->getUser()->getID()) == 1) {
                 $this->sendToAll("USER_DISCONNECTED", $this->connections[$connection->resourceId]->getUser());
             }
+
+            //Set as offline
+            $this->connections[$connection->getConnection()->resourceId]->setStatus("OFFLINE");
+            $this->connections[$connection->getConnection()->resourceId]->save();
         }
 
         // The connection is closed, remove it, as we can no longer send it messages
