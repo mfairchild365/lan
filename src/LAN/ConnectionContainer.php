@@ -3,7 +3,6 @@ namespace LAN;
 
 class ConnectionContainer
 {
-    protected $user       = false; // \LAN\User\Record   object
     protected $connection = false; // \Wrench\Connection object
 
     function __construct(\Ratchet\ConnectionInterface $connection)
@@ -18,15 +17,12 @@ class ConnectionContainer
 
     function getUser()
     {
-        return $this->user;
+        return User\Record::getUser($this->connection);
     }
 
     function setConnection(\Ratchet\ConnectionInterface $connection)
     {
         $this->connection = $connection;
-
-        //Look for user
-        $this->user = User\Record::getUser($connection);
     }
 
 
