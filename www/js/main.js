@@ -121,7 +121,7 @@ var app = {
             $('#edit-profile-modal').modal();
         }
 
-        $('#edit-profile').html(app.user['name']);
+        $('#edit-profile-link').html(app.user['name']);
     },
 
     onUserUpdated: function(data)
@@ -170,7 +170,7 @@ var app = {
         //Update the client user if we need to.
         if (user['id'] == app.user['id']) {
             app.user = user;
-            $('#edit-profile').html(app.user['name']);
+            $('#edit-profile-link').html(app.user['name']);
         }
     },
 

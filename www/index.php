@@ -37,7 +37,7 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
                     <li class="active"><a href="#">Home</a></li>
                 </ul>
                 <ul class='nav pull-right'>
-                    <li><a href='#' id='edit-profile'>Your Name</a></li>
+                    <li><a href='#' id='edit-profile'><span id='edit-profile-link'>Your Name</span> (Edit Profile)</a></li>
                     <li><a href='#'><span id='connection-status' class='badge badge-important'>Offline</span></a></li>
                 </ul>
             </div>
