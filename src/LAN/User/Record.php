@@ -130,9 +130,9 @@ class Record extends \DB\Record implements \LAN\Renderable
         $this->date_created = $date;
     }
 
-    function setDateUpdated($date)
+    function setDateEdited($date)
     {
-        $this->date_updated = $date;
+        $this->date_edited = $date;
     }
 
     function setStatus($status)
