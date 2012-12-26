@@ -26,10 +26,14 @@ class Application implements MessageComponentInterface {
         echo "IP  : " . $this->connections[$connection->resourceId]->getUser()->getIP() . PHP_EOL;
         echo "MAC : " . $this->connections[$connection->resourceId]->getUser()->getMAC() . PHP_EOL;
 
+        $this->connections[$connection->resourceId]->send('USER_INFORMATION', $this->connections[$connection->resourceId]->getUser());
+
+        //Update the client's list with all users currently online.
         foreach (User\RecordList::getAllOnline() as $user) {
             $this->connections[$connection->resourceId]->send('USER_CONNECTED', $user);
         }
 
+        //Tell everyone else that this guy just came online.
         if ($this->getUserConnectionCount($this->connections[$connection->resourceId]->getUser()->getID()) == 1) {
             $this->sendToAll("USER_CONNECTED", $this->connections[$connection->resourceId]->getUser());
         }
@@ -39,11 +43,26 @@ class Application implements MessageComponentInterface {
         echo "--------ACTION--------" . PHP_EOL;
         echo "IP  : " . $this->connections[$connection->resourceId]->getUser()->getIP() . PHP_EOL;
 
-        foreach ($this->clients as $client) {
-            if ($connection !== $client) {
-                // The sender is not the receiver, send to each client connected
-                $client->send($msg);
-            }
+        $data = json_decode($msg, true);
+
+        if (!isset($data['action'])) {
+            throw new Exception("An action must be passed.");
+        }
+
+        $class = '';
+
+        switch ($data['action']) {
+            case 'UPDATE_USER':
+                $class = '\LAN\User\ActionHandler';
+                break;
+        }
+
+        $handler = new $class;
+
+        $result = $handler->handle($data['action'], $data['data'], $this->connections[$connection->resourceId]);
+
+        if ($result) {
+            $this->sendToAll($result['action'], $result['data']);
         }
     }
 
@@ -67,8 +86,6 @@ class Application implements MessageComponentInterface {
 
         // The connection is closed, remove it, as we can no longer send it messages
         unset($this->connections[$connection->getConnection()->resourceId]);
-
-        //TODO: Send USER_DISCONNECTED action to all clients.
 
         $this->sendToAll("USER_DISCONNECTED", $connection->getUser());
     }
@@ -117,6 +134,7 @@ class Application implements MessageComponentInterface {
      *   - USER_INFORMATION  - Detailed information about the logged in user (sent on onConnect)
      *   - USER_CONNECTED    - Sent to all users when a user is connected.
      *   - USER_DISCONNECTED - Sent to all users when a user is disconnected.
+     *   - USER_UPDATED      - Sent to everyone when a user has been updated
      *   - MESSAGE_RECEIVED  - Sent to all users when a new message is received.
      *   - ERROR             - Information about an error.
      *
@@ -147,7 +165,7 @@ class Application implements MessageComponentInterface {
      */
     public static function sendMessageToClient(\Ratchet\ConnectionInterface $connection, $action, $data)
     {
-        if(!in_array($action, array('USER_INFORMATION', 'USER_CONNECTED', 'USER_DISCONNECTED', 'MESSAGE_RECEIVED', 'ERROR'))) {
+        if(!in_array($action, array('USER_INFORMATION', 'USER_CONNECTED', 'USER_DISCONNECTED', 'MESSAGE_RECEIVED', 'ERROR', 'USER_UPDATED'))) {
             throw new Exception("Unknown Action Type: " . $action);
         }
 

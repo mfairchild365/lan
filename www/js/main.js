@@ -1,5 +1,6 @@
 var app = {
     connection : false,
+    user       : false,
 
     init: function (serverAddress)
     {
@@ -22,6 +23,45 @@ var app = {
         } catch (ex) {
             console.log(ex);
         }
+
+        $('#save-profile').click(function() {
+            var name = $('#edit-name').val();
+
+            if (name == '' || name == null) {
+                $('#edit-profile-alert-text').html("You must fill in a name");
+                $('#edit-profile-alert').addClass('fade in');
+                $('#edit-profile-alert').show();
+                $('#edit-profile-alert').alert();
+                return;
+            }
+
+            app.user.name = name;
+
+            app.send('UPDATE_USER', app.user);
+
+            $('#edit-profile-modal').modal('hide')
+        });
+
+        $('.alert .close').live("click", function(e) {
+            $(this).parent().hide();
+        });
+
+
+    },
+
+    /**
+     * Actions:
+     *   -- UPDATE_USER (user object)
+     *   -- SEND_CHAT_MESSAGE (text object)
+     */
+    send: function(action, object)
+    {
+        data = { };
+
+        data['action'] = action;
+        data['data']   = object;
+
+        app.connection.send(JSON.stringify(data));
     },
 
     onOpen: function(event)
@@ -46,6 +86,13 @@ var app = {
                 break;
             case 'USER_DISCONNECTED':
                 app.onUserDisconnected(data['data']);
+                break;
+            case 'USER_INFORMATION':
+                app.onUserInformation(data['data']);
+                break;
+            case 'USER_UPDATED':
+                app.onUserUpdated(data['data']);
+                break;
         }
     },
 
@@ -73,9 +120,23 @@ var app = {
         app.removeUser(data['LAN\\User\\Record']);
     },
 
+    onUserInformation: function(data)
+    {
+        app.user = data['LAN\\User\\Record'];
+
+        if (app.user.name == "UNKNOWN") {
+            $('#edit-profile-modal').modal();
+        }
+    },
+
+    onUserUpdated: function(data)
+    {
+        app.updateUser(data['LAN\\User\\Record']);
+    },
+
     addUser: function(user)
     {
-        var elementId = 'LAN-User-Record-' + user['id'];
+        var elementId = app.getUserElementId(user);
 
         //Only append if it does not already exist
         if ($('#' + elementId).length != 0) {
@@ -95,7 +156,7 @@ var app = {
 
     removeUser: function(user)
     {
-        var elementId = 'LAN-User-Record-' + user['id'];
+        var elementId = app.getUserElementId(user);
 
         //Only append if it does not already exist
         if ($('#' + elementId).length == 0) {
@@ -103,6 +164,22 @@ var app = {
         }
 
         $('#' + elementId).remove();
+    },
+
+    updateUser: function(user)
+    {
+        var elementId = app.getUserElementId(user);
+
+        $('#' + elementId + " .user-name").html(user['name']);
+
+        //Update the client user if we need to.
+        if (user['id'] == app.user['id']) {
+            app.user = user;
+        }
+    },
+
+    getUserElementId: function(user) {
+        return 'LAN-User-Record-' + user['id'];
     }
 
 };
