@@ -24,29 +24,22 @@ var app = {
             console.log(ex);
         }
 
+        $('#edit-profile').click(function(){
+            $('#edit-name').val(app.user['name']);
+            $('#edit-profile-modal').modal();
+        });
+
+        $('#edit-profile-form').submit(function(){
+            app.handleProfileEditForm();
+        });
+
         $('#save-profile').click(function() {
-            var name = $('#edit-name').val();
-
-            if (name == '' || name == null) {
-                $('#edit-profile-alert-text').html("You must fill in a name");
-                $('#edit-profile-alert').addClass('fade in');
-                $('#edit-profile-alert').show();
-                $('#edit-profile-alert').alert();
-                return;
-            }
-
-            app.user.name = name;
-
-            app.send('UPDATE_USER', app.user);
-
-            $('#edit-profile-modal').modal('hide')
+            app.handleProfileEditForm();
         });
 
         $('.alert .close').live("click", function(e) {
             $(this).parent().hide();
         });
-
-
     },
 
     /**
@@ -127,6 +120,8 @@ var app = {
         if (app.user.name == "UNKNOWN") {
             $('#edit-profile-modal').modal();
         }
+
+        $('#edit-profile').html(app.user['name']);
     },
 
     onUserUpdated: function(data)
@@ -175,11 +170,29 @@ var app = {
         //Update the client user if we need to.
         if (user['id'] == app.user['id']) {
             app.user = user;
+            $('#edit-profile').html(app.user['name']);
         }
     },
 
     getUserElementId: function(user) {
         return 'LAN-User-Record-' + user['id'];
-    }
+    },
 
+    handleProfileEditForm: function() {
+        var name = $('#edit-name').val();
+
+        if (name == '' || name == null) {
+            $('#edit-profile-alert-text').html("You must fill in a name");
+            $('#edit-profile-alert').addClass('fade in');
+            $('#edit-profile-alert').show();
+            $('#edit-profile-alert').alert();
+            return;
+        }
+
+        app.user.name = name;
+
+        app.send('UPDATE_USER', app.user);
+
+        $('#edit-profile-modal').modal('hide');
+    }
 };

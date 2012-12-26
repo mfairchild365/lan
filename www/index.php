@@ -37,6 +37,7 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
                     <li class="active"><a href="#">Home</a></li>
                 </ul>
                 <ul class='nav pull-right'>
+                    <li><a href='#' id='edit-profile'>Your Name</a></li>
                     <li><a href='#'><span id='connection-status' class='badge badge-important'>Offline</span></a></li>
                 </ul>
             </div>
@@ -74,10 +75,10 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
                     <h4 class="alert-heading">Oh snap! You got an error!</h4>
                     <p id='edit-profile-alert-text'>Unknown Error</p>
                 </div>
-                <form action='#'>
+                <form id='edit-profile-form' action='#'>
                     <fieldset>
                         <legend>Edit Profile</legend>
-                        <label for="edit-name">Your Name
+                        <label for="edit-name">
                             <input type="text" id="edit-name" />
                         </label>
                     </fieldset>
