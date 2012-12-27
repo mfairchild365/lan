@@ -13,7 +13,7 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bootstrap 101 Template</title>
+    <title>LAN</title>
     <!-- Bootstrap using http://bootswatch.com/cyborg/ -->
     <link href="<?php echo Util::getURL();?>css/bootstrap.min.css" rel="stylesheet" media="screen">
 
