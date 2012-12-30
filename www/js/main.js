@@ -5,9 +5,14 @@ var app = {
     messages              : [],
     timeLoop              : false,
     messageListAutoScroll : true, //auto scroll the message list
+    baseURL               : '',
+    notifications         : [],
+    visible               : false,
 
-    init: function (serverAddress)
+    init: function (serverAddress, baseURL)
     {
+        app.baseURL = baseURL;
+
         try {
             app.connection = new WebSocket(serverAddress);
 
@@ -66,6 +71,16 @@ var app = {
                 app.messageListAutoScroll = false;
             }
         });
+
+        $('#show-notifications').click(function(e){
+            window.webkitNotifications.requestPermission();
+
+            e.preventDefault();
+        });
+
+        if (window.webkitNotifications.checkPermission() != 0) { // 0 is PERMISSION_ALLOWED
+            $('#show-notifications').css('visibility', 'visible');
+        }
 
         app.timeLoop = setInterval('app.updateMessageTimes()', 1000);
     },
@@ -194,6 +209,31 @@ var app = {
         $('#message-list').append("<li id='message-" + message['id'] + "' class='" + userClass + "'>" + message['message'] + " <div class='info'><span class='user user-" + message['users_id'] + "'>" + app.users[message['users_id']]['name'] + "</span> <span class='message-date'>" + time + "</span></div></li>");
 
         app.scrollMessages();
+
+        if (window.webkitNotifications.checkPermission() == 0 && app.visible == false) {
+            // function defined in step 2
+
+            notification = window.webkitNotifications.createNotification(
+                app.baseURL + 'img/alert.png', 'LAN: New Message', message['message']);
+
+            notification.onclick = function() {
+                //Focus the window.
+                window.focus();
+
+                app.clearNotifications();
+            };
+
+            notification.onclose = function() {
+                //Focus the window.
+                window.focus();
+
+                app.clearNotifications();
+            };
+
+            notification.show();
+
+            app.notifications.push(notification);
+        }
     },
 
     addUser: function(user)
@@ -290,6 +330,12 @@ var app = {
     scrollMessages:function () {
         if (app.messageListAutoScroll) {
             $("#message-list").scrollTop($("#message-list").prop('scrollHeight'));
+        }
+    },
+
+    clearNotifications: function() {
+        for (id in app.notifications) {
+            app.notifications[id].cancel();
         }
     }
 };

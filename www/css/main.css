@@ -50,3 +50,7 @@ li.me {
     margin-top: 5px;
     margin-bottom: 20px;
 }
+
+#show-notifications {
+    visibility: hidden;
+}

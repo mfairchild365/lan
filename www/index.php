@@ -21,11 +21,12 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="<?php echo Util::getURL();?>js/bootstrap.min.js"></script>
     <script src="<?php echo Util::getURL();?>js/moment.min.js"></script>
+    <script src="<?php echo Util::getURL();?>js/jquery.visibility.min.js"></script>
     <script src="<?php echo Util::getURL();?>js/main.js"></script>
 
     <script type="text/javascript">
         $(function(){
-            app.init("ws://<?php echo \LAN\Config::get('SERVER_ADDR'); ?>:<?php echo \LAN\Config::get('SERVER_PORT'); ?>/lan");
+            app.init("ws://<?php echo \LAN\Config::get('SERVER_ADDR'); ?>:<?php echo \LAN\Config::get('SERVER_PORT'); ?>/lan", '<?php echo \LAN\Util::getURL()?>');
         });
     </script>
 </head>
@@ -39,6 +40,8 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
                     <li class="active"><a href="#">Home</a></li>
                 </ul>
                 <ul class='nav pull-right'>
+
+                    <li><a href='#' id='show-notifications'>Enable Desktop Notifications</a></li>
                     <li><a href='#' id='edit-profile'><span id='edit-profile-link'>Your Name</span> (Edit Profile)</a></li>
                     <li><a href='#'><span id='connection-status' class='badge badge-important'>Offline</span></a></li>
                 </ul>
