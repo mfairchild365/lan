@@ -29,7 +29,7 @@ ENGINE = InnoDB;
 -- Table `lan`.`messages`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `lan`.`messages` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `users_id` INT(45) NULL ,
   `date_created` DATETIME NULL ,
   `date_edited` DATETIME NULL ,
