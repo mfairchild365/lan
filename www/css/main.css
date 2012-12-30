@@ -45,3 +45,8 @@ li.me {
 #message-list .info {
     font-size: .75em;
 }
+
+.page-header {
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
