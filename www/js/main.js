@@ -1,9 +1,10 @@
 var app = {
-    connection : false,
-    user       : false,
-    users      : [],
-    messages   : [],
-    timeLoop   : false,
+    connection            : false,
+    user                  : false,
+    users                 : [],
+    messages              : [],
+    timeLoop              : false,
+    messageListAutoScroll : true, //auto scroll the message list
 
     init: function (serverAddress)
     {
@@ -55,6 +56,14 @@ var app = {
 
                 //Don't allow the enter key to be processed.
                 event.preventDefault();
+            }
+        });
+
+        $('#message-list').scroll(function(event){
+            if(($('#message-list').scrollTop() + $('#message-list').height()) == $('#message-list').prop('scrollHeight')) {
+                app.messageListAutoScroll = true;
+            } else {
+                app.messageListAutoScroll = false;
             }
         });
 
@@ -279,6 +288,8 @@ var app = {
     },
 
     scrollMessages:function () {
-        $("#message-list").scrollTop($("#message-list").prop('scrollHeight'));
+        if (app.messageListAutoScroll) {
+            $("#message-list").scrollTop($("#message-list").prop('scrollHeight'));
+        }
     }
 };
