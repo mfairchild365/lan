@@ -183,6 +183,8 @@ var app = {
         var time = moment(message['date_created']).fromNow()
 
         $('#message-list').append("<li id='message-" + message['id'] + "' class='" + userClass + "'>" + message['message'] + " <div class='info'><span class='user user-" + message['users_id'] + "'>" + app.users[message['users_id']]['name'] + "</span> <span class='message-date'>" + time + "</span></div></li>");
+
+        app.scrollMessages();
     },
 
     addUser: function(user)
@@ -274,5 +276,9 @@ var app = {
             $('#message-' + id + " .message-date").html(time);
         }
 
+    },
+
+    scrollMessages:function () {
+        $("#message-list").scrollTop($("#message-list").prop('scrollHeight'));
     }
 };
