@@ -1,6 +1,7 @@
 var app = {
     connection : false,
     user       : false,
+    users      : [],
 
     init: function (serverAddress)
     {
@@ -40,6 +41,20 @@ var app = {
         $('.alert .close').live("click", function(e) {
             $(this).parent().hide();
         });
+
+        $("#message").keypress(function(event) {
+            //check if we need to submit the message.
+            if (event.keyCode == 13 && !event.shiftKey) {
+                //submit the message.
+                app.submitMessage($("#message").val());
+
+                //clear the message container.
+                $("#message").val('');
+
+                //Don't allow the enter key to be processed.
+                event.preventDefault();
+            }
+        });
     },
 
     /**
@@ -73,6 +88,8 @@ var app = {
             console.log('Error: No action provided');
         }
 
+        console.log(data['action']);
+
         switch(data['action']) {
             case 'USER_CONNECTED':
                 app.onUserConnected(data['data']);
@@ -85,6 +102,9 @@ var app = {
                 break;
             case 'USER_UPDATED':
                 app.onUserUpdated(data['data']);
+                break;
+            case 'MESSAGE_NEW':
+                app.onNewMessage(data['data']);
                 break;
         }
     },
@@ -106,6 +126,9 @@ var app = {
     onUserConnected: function(data)
     {
         app.addUser(data['LAN\\User\\Record']);
+
+        //Add the user to our internal users array.
+        app.users[data['LAN\\User\\Record']['id']] = data['LAN\\User\\Record'];
     },
 
     onUserDisconnected: function(data)
@@ -132,6 +155,21 @@ var app = {
     onUserUpdated: function(data)
     {
         app.updateUser(data['LAN\\User\\Record']);
+
+        //Update the internal user,
+        app.users[data['LAN\\User\\Record']['id']] = data['LAN\\User\\Record'];
+    },
+
+    onNewMessage: function(data)
+    {
+        app.addMessage(data['LAN\\Message\\Record']);
+    },
+
+    addMessage: function(message)
+    {
+        console.log(message);
+
+        $('#message-list').append("<li>" + message['message'] + " <span class='user user-" + message['users_id'] + "'>" + app.users[message['users_id']]['name'] + "</span> <span class='message-date'>" + message['date_created'] + "</span></li>");
     },
 
     addUser: function(user)
@@ -201,5 +239,14 @@ var app = {
         app.send('UPDATE_USER', app.user);
 
         $('#edit-profile-modal').modal('hide');
+    },
+
+    submitMessage: function(message)
+    {
+        if (message == undefined) {
+            return false;
+        }
+
+        app.send('SEND_CHAT_MESSAGE', message);
     }
 };

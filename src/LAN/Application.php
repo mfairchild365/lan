@@ -55,6 +55,11 @@ class Application implements MessageComponentInterface {
             case 'UPDATE_USER':
                 $class = '\LAN\User\ActionHandler';
                 break;
+            case 'SEND_CHAT_MESSAGE':
+                $class = '\LAN\Message\ActionHandler';
+                break;
+            default:
+                throw new Exception("Unknown action submitted by client", 400);
         }
 
         $handler = new $class;
@@ -135,7 +140,7 @@ class Application implements MessageComponentInterface {
      *   - USER_CONNECTED    - Sent to all users when a user is connected.
      *   - USER_DISCONNECTED - Sent to all users when a user is disconnected.
      *   - USER_UPDATED      - Sent to everyone when a user has been updated
-     *   - MESSAGE_RECEIVED  - Sent to all users when a new message is received.
+     *   - MESSAGE_NEW       - Sent to all users when a new message is received.
      *   - ERROR             - Information about an error.
      *
      * example JSON output:
@@ -165,7 +170,7 @@ class Application implements MessageComponentInterface {
      */
     public static function sendMessageToClient(\Ratchet\ConnectionInterface $connection, $action, $data)
     {
-        if(!in_array($action, array('USER_INFORMATION', 'USER_CONNECTED', 'USER_DISCONNECTED', 'MESSAGE_RECEIVED', 'ERROR', 'USER_UPDATED'))) {
+        if(!in_array($action, array('USER_INFORMATION', 'USER_CONNECTED', 'USER_DISCONNECTED', 'MESSAGE_NEW', 'ERROR', 'USER_UPDATED'))) {
             throw new Exception("Unknown Action Type: " . $action);
         }
 

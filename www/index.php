@@ -61,6 +61,7 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
                     <ul id='message-list'>
 
                     </ul>
+                    <textarea cols='6' class='span9' id='message'></textarea>
                 </div>
             </div>
         </div>

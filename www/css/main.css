@@ -24,3 +24,7 @@ li.me {
     margin-bottom: 0px;
     border: none;
 }
+
+#message {
+    width: 100%;
+}
