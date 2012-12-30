@@ -17,7 +17,8 @@ class RecordList extends \DB\RecordList
         //Build the list
         $options = $options + self::getDefaultOptions();
         $options['sql'] = "SELECT id
-                           FROM messages";
+                           FROM messages
+                           ORDER BY date_created ASC";
 
         return self::getBySql($options);
     }
