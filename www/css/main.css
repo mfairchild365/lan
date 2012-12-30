@@ -28,3 +28,18 @@ li.me {
 #message {
     width: 100%;
 }
+
+#message-list {
+    margin-left: 0px;
+}
+
+#message-list li {
+    list-style: none;
+    margin-bottom: 5px;
+    padding-left: 5px;
+    border-bottom: black 1px solid;
+}
+
+#message-list .info {
+    font-size: .75em;
+}

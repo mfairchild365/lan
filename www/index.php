@@ -20,6 +20,7 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
 
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="<?php echo Util::getURL();?>js/bootstrap.min.js"></script>
+    <script src="<?php echo Util::getURL();?>js/moment.min.js"></script>
     <script src="<?php echo Util::getURL();?>js/main.js"></script>
 
     <script type="text/javascript">

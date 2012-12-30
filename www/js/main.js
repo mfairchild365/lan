@@ -172,8 +172,10 @@ var app = {
         if (message['users_id'] == app.user['id']) {
             userClass = 'me';
         }
+        console.log(message['date_created']);
+        var time = moment(message['date_created']).fromNow()
 
-        $('#message-list').append("<li class='" + userClass + "'>" + message['message'] + " <span class='user user-" + message['users_id'] + "'>" + app.users[message['users_id']]['name'] + "</span> <span class='message-date'>" + message['date_created'] + "</span></li>");
+        $('#message-list').append("<li id='message-" + message['id'] + "' class='" + userClass + "'>" + message['message'] + " <div class='info'><span class='user user-" + message['users_id'] + "'>" + app.users[message['users_id']]['name'] + "</span> <span class='message-date'>" + time + "</span></div></li>");
     },
 
     addUser: function(user)
