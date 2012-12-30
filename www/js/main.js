@@ -2,6 +2,8 @@ var app = {
     connection : false,
     user       : false,
     users      : [],
+    messages   : [],
+    timeLoop   : false,
 
     init: function (serverAddress)
     {
@@ -55,6 +57,8 @@ var app = {
                 event.preventDefault();
             }
         });
+
+        app.timeLoop = setInterval('app.updateMessageTimes()', 1000);
     },
 
     /**
@@ -163,6 +167,9 @@ var app = {
     onNewMessage: function(data)
     {
         app.addMessage(data['LAN\\Message\\Record']);
+
+        //Add the message to the internal list of messages.
+        app.messages[data['LAN\\Message\\Record']['id']] = data['LAN\\Message\\Record'];
     },
 
     addMessage: function(message)
@@ -172,7 +179,7 @@ var app = {
         if (message['users_id'] == app.user['id']) {
             userClass = 'me';
         }
-        console.log(message['date_created']);
+
         var time = moment(message['date_created']).fromNow()
 
         $('#message-list').append("<li id='message-" + message['id'] + "' class='" + userClass + "'>" + message['message'] + " <div class='info'><span class='user user-" + message['users_id'] + "'>" + app.users[message['users_id']]['name'] + "</span> <span class='message-date'>" + time + "</span></div></li>");
@@ -254,5 +261,16 @@ var app = {
         }
 
         app.send('SEND_CHAT_MESSAGE', message);
+    },
+
+    updateMessageTimes: function()
+    {
+        for (id in app.messages){
+
+            var time = moment(app.messages[id]['date_created']).fromNow()
+
+            $('#message-' + id + " .message-date").html(time);
+        }
+
     }
 };
