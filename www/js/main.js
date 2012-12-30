@@ -7,7 +7,7 @@ var app = {
     messageListAutoScroll : true, //auto scroll the message list
     baseURL               : '',
     notifications         : [],
-    visible               : false,
+    visible               : true,
 
     init: function (serverAddress, baseURL)
     {
@@ -81,6 +81,15 @@ var app = {
         if (window.webkitNotifications.checkPermission() != 0) { // 0 is PERMISSION_ALLOWED
             $('#show-notifications').css('visibility', 'visible');
         }
+
+        $(document).on({
+            'show': function() {
+                app.visible = true;
+            },
+            'hide': function() {
+                app.visible = false;
+            }
+        });
 
         app.timeLoop = setInterval('app.updateMessageTimes()', 1000);
     },
@@ -209,7 +218,7 @@ var app = {
         $('#message-list').append("<li id='message-" + message['id'] + "' class='" + userClass + "'>" + message['message'] + " <div class='info'><span class='user user-" + message['users_id'] + "'>" + app.users[message['users_id']]['name'] + "</span> <span class='message-date'>" + time + "</span></div></li>");
 
         app.scrollMessages();
-
+console.log(app.visible);
         if (window.webkitNotifications.checkPermission() == 0 && app.visible == false) {
             // function defined in step 2
 
