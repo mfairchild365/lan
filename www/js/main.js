@@ -225,6 +225,8 @@ var app = {
 
         $('#' + elementId + " .user-name").html(user['name']);
 
+        $('.user-' + user['id']).html(user['name']);
+
         //Update the client user if we need to.
         if (user['id'] == app.user['id']) {
             app.user = user;
