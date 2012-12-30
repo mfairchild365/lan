@@ -26,13 +26,13 @@ class Application implements MessageComponentInterface {
         echo "IP  : " . $this->connections[$connection->resourceId]->getUser()->getIP() . PHP_EOL;
         echo "MAC : " . $this->connections[$connection->resourceId]->getUser()->getMAC() . PHP_EOL;
 
-        //Send the client information about the logged in user
-        $this->connections[$connection->resourceId]->send('USER_INFORMATION', $this->connections[$connection->resourceId]->getUser());
-
         //Update the client's list with all users currently online.
         foreach (User\RecordList::getAllOnline() as $user) {
             $this->connections[$connection->resourceId]->send('USER_CONNECTED', $user);
         }
+
+        //Send the client information about the logged in user
+        $this->connections[$connection->resourceId]->send('USER_INFORMATION', $this->connections[$connection->resourceId]->getUser());
 
         //Tell everyone else that this guy just came online.
         if ($this->getUserConnectionCount($this->connections[$connection->resourceId]->getUser()->getID()) == 1) {
