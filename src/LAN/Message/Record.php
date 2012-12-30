@@ -113,6 +113,7 @@ class Record extends \DB\Record implements \LAN\Renderable
 
         $data['date_created'] = date('c', strtotime($data['date_created']));
         $data['date_edited']  = date('c', strtotime($data['date_edited']));
+        $data['message']      = str_replace("&lt;br /&gt;", "<br />",  \LAN\Util::makeClickableLinks($data['message']));
 
         return $data;
     }

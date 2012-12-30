@@ -80,4 +80,8 @@ class Util
     {
         return "http://" . Config::get('SERVER_ADDR') . Config::get('WWW_PATH');
     }
+
+    public static function makeClickableLinks($text) {
+        return preg_replace('@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#+%-]*(\?\S+)?[^\.\s])?)?)@', '<a href="$1" target="_blank">$1</a>', $text);
+    }
 }
