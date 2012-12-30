@@ -167,9 +167,13 @@ var app = {
 
     addMessage: function(message)
     {
-        console.log(message);
+        var userClass = 'them';
 
-        $('#message-list').append("<li>" + message['message'] + " <span class='user user-" + message['users_id'] + "'>" + app.users[message['users_id']]['name'] + "</span> <span class='message-date'>" + message['date_created'] + "</span></li>");
+        if (message['users_id'] == app.user['id']) {
+            userClass = 'me';
+        }
+
+        $('#message-list').append("<li class='" + userClass + "'>" + message['message'] + " <span class='user user-" + message['users_id'] + "'>" + app.users[message['users_id']]['name'] + "</span> <span class='message-date'>" + message['date_created'] + "</span></li>");
     },
 
     addUser: function(user)
