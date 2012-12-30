@@ -16,6 +16,7 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
     <title>LAN</title>
     <!-- Bootstrap using http://bootswatch.com/cyborg/ -->
     <link href="<?php echo Util::getURL();?>css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="<?php echo Util::getURL();?>css/main.css" rel="stylesheet" media="screen">
 
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="<?php echo Util::getURL();?>js/bootstrap.min.js"></script>

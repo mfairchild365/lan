@@ -26,8 +26,6 @@ class Application implements MessageComponentInterface {
         echo "IP  : " . $this->connections[$connection->resourceId]->getUser()->getIP() . PHP_EOL;
         echo "MAC : " . $this->connections[$connection->resourceId]->getUser()->getMAC() . PHP_EOL;
 
-        $this->connections[$connection->resourceId]->send('USER_INFORMATION', $this->connections[$connection->resourceId]->getUser());
-
         //Update the client's list with all users currently online.
         foreach (User\RecordList::getAllOnline() as $user) {
             $this->connections[$connection->resourceId]->send('USER_CONNECTED', $user);
@@ -37,6 +35,8 @@ class Application implements MessageComponentInterface {
         if ($this->getUserConnectionCount($this->connections[$connection->resourceId]->getUser()->getID()) == 1) {
             $this->sendToAll("USER_CONNECTED", $this->connections[$connection->resourceId]->getUser());
         }
+
+        $this->connections[$connection->resourceId]->send('USER_INFORMATION', $this->connections[$connection->resourceId]->getUser());
     }
 
     public function onMessage(ConnectionInterface $connection, $msg) {

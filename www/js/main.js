@@ -122,6 +122,11 @@ var app = {
         }
 
         $('#edit-profile-link').html(app.user['name']);
+
+        var elementId = app.getUserElementId(app.user);
+
+        $('#' + elementId).removeClass('them');
+        $('#' + elementId).addClass('me');
     },
 
     onUserUpdated: function(data)
@@ -147,6 +152,8 @@ var app = {
                    "</li>";
 
         $('#user-list').append(html);
+
+        $('#' + elementId).addClass('them');
     },
 
     removeUser: function(user)

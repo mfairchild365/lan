@@ -1,0 +1,26 @@
+#user-list {
+    margin-left: 0px;
+}
+
+#user-list li {
+    list-style: none;
+    margin-bottom: 10px;
+}
+
+#user-list li ul {
+    margin-left: 0px;
+    padding-left: 10px;
+}
+
+li.them {
+    border-left: #FEF5CA solid 2px;
+}
+
+li.me {
+    border-left: #33B5E5 solid 2px;
+}
+
+#user-list li li {
+    margin-bottom: 0px;
+    border: none;
+}
