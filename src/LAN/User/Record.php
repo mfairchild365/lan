@@ -47,20 +47,20 @@ class Record extends \DB\Record implements \LAN\Renderable
         return parent::update();
     }
 
-    public static function getUser(\Ratchet\ConnectionInterface $connection)
+    public static function getUser(\Ratchet\ConnectionInterface $connection, $mac)
     {
-        if ($record = self::getByMAC(\LAN\Util::getMac($connection->remoteAddress))) {
+        if ($record = self::getByMAC($mac)) {
             return $record;
         }
 
-        return self::createNewUser($connection);
+        return self::createNewUser($connection, $mac);
     }
 
-    public static function createNewUser(\Ratchet\ConnectionInterface $connection)
+    public static function createNewUser(\Ratchet\ConnectionInterface $connection, $mac)
     {
         $record = new self();
 
-        $record->setMAC(\LAN\Util::getMac($connection->remoteAddress));
+        $record->setMAC($mac);
         $record->setIP($connection->remoteAddress);
         $record->setHostName(gethostbyaddr($connection->remoteAddress));
         $record->setName("UNKNOWN");
