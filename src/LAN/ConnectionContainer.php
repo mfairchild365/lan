@@ -4,10 +4,12 @@ namespace LAN;
 class ConnectionContainer
 {
     protected $connection = false; // \Wrench\Connection object
+    protected $mac        = false; // Cash the MAC address as arp lookup may be slow.
 
     function __construct(\Ratchet\ConnectionInterface $connection)
     {
         $this->setConnection($connection);
+        $this->mac = \LAN\Util::getMac($connection->remoteAddress);
     }
 
     function getConnection()
@@ -17,7 +19,7 @@ class ConnectionContainer
 
     function getUser()
     {
-        return User\Record::getUser($this->connection);
+        return User\Record::getUser($this->connection, $this->mac);
     }
 
     function setConnection(\Ratchet\ConnectionInterface $connection)
