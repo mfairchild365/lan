@@ -11,7 +11,7 @@ class Util
         $regex = '/([0-9a-fA-F]{2}[:-]){5}([0-9a-fA-F]{2})/';
 
         //run the external command, break output into lines
-        $arp   = `arp -a $ip`;
+        $arp   = `arp -a | grep $ip`;
 
         $matches = array();
 
@@ -23,7 +23,7 @@ class Util
         }
 
         if ($ip == Config::get('SERVER_ADDR')) {
-            $ifconifg = shell_exec('ifconfig | grep eth' . Config::get('SERVER_ETH'));
+            $ifconifg = shell_exec('ifconfig ' . Config::get('SERVER_ETH'));
 
             preg_match($regex, $ifconifg, $matches);
 
