@@ -8,7 +8,7 @@ class Util
     public static function getMAC($ip)
     {
         //Regex to get MAC address
-        $regex = '/([0-9a-fA-F]{2}[:-]){5}([0-9a-fA-F]{2})/';
+        $regex = '/([0-9a-fA-F]{1,2}[:-]){5}([0-9a-fA-F]{1,2})/';
 
         //run the external command, break output into lines
         $arp   = `arp -a | grep $ip`;
