@@ -155,12 +155,20 @@ var app = {
 
         $("#connection-status").removeClass('badge-success');
         $("#connection-status").addClass('badge-important');
+        $("#connection-status").removeClass('badge-warning');
         $("#connection-status").html("Offline");
     },
 
     onError: function(event)
     {
-        console.log(event.data);
+        console.log("Error");
+
+        $("#connection-status").removeClass('badge-success');
+        $("#connection-status").removeClass('badge-warning');
+        $("#connection-status").addClass('badge-important');
+        $("#connection-status").html("Offline");
+
+        alert(event.data);
     },
 
     onUserConnected: function(data)

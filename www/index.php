@@ -42,7 +42,7 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
 
                     <li><a href='#' id='show-notifications'>Enable Desktop Notifications</a></li>
                     <li><a href='#' id='edit-profile'><span id='edit-profile-link'>Your Name</span> (Edit Profile)</a></li>
-                    <li><a href='#'><span id='connection-status' class='badge badge-important'>Offline</span></a></li>
+                    <li><a href='#'><span id='connection-status' class='badge badge-warning'>Loading..</span></a></li>
                 </ul>
             </div>
         </div>
