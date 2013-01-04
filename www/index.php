@@ -64,7 +64,7 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
                     <ul id='message-list'>
 
                     </ul>
-                    <textarea cols='6' class='span9' id='message'></textarea>
+                    <textarea cols='6' class='span9' id='message' disabled='disabled'></textarea>
                 </div>
             </div>
         </div>
@@ -92,6 +92,18 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
                 <button id='save-profile' class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+        <div id="error-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="error-modal" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                <h3 id="error-modal-label">Error</h3>
+            </div>
+            <div class="modal-body">
+                <div id='error-modal-alert' class="alert alert-block alert-error fade in">
+                    <h4 class="alert-heading">Oh snap! You got an error!</h4>
+                    <p id='error-modal-alert-text'>Unknown Error</p>
+                </div>
             </div>
         </div>
     </div>
