@@ -22,4 +22,14 @@ class RecordList extends \DB\RecordList
 
         return self::getBySql($options);
     }
+
+    public static function getAll($options = array())
+    {
+        //Build the list
+        $options = $options + self::getDefaultOptions();
+        $options['sql'] = "SELECT id
+                           FROM users";
+
+        return self::getBySql($options);
+    }
 }
