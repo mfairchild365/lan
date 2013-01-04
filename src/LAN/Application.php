@@ -28,7 +28,7 @@ class Application implements MessageComponentInterface {
         echo "MAC : " . $user->getMAC() . PHP_EOL;
 
         //Update the client's list with all users currently online.
-        foreach (User\RecordList::getAllOnline() as $data) {
+        foreach (User\RecordList::getAll() as $data) {
             $this->connections[$connection->resourceId]->send('USER_CONNECTED', $data);
         }
 

@@ -165,10 +165,12 @@ var app = {
 
     onUserConnected: function(data)
     {
-        app.addUser(data['LAN\\User\\Record']);
-
         //Add the user to our internal users array.
         app.users[data['LAN\\User\\Record']['id']] = data['LAN\\User\\Record'];
+
+        if (app.users[data['LAN\\User\\Record']['id']]['status'] == 'ONLINE') {
+            app.addUser(data['LAN\\User\\Record']);
+        }
     },
 
     onUserDisconnected: function(data)
