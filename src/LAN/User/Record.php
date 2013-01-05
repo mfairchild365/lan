@@ -11,6 +11,7 @@ class Record extends \DB\Record implements \LAN\Renderable
     protected $date_edited; //DATETIME
     protected $status;       //ENUM('ONLINE', 'OFFLINE')
     protected $host_name;    //VARCHAR(256)
+    protected $steam_id_64;  //VARCHAR(256)
 
     public static function getByID($id)
     {
@@ -110,6 +111,11 @@ class Record extends \DB\Record implements \LAN\Renderable
         return $this->host_name;
     }
 
+    function getSteamID64()
+    {
+        return  $this->steam_id_64;
+    }
+
     function setMAC($mac)
     {
         $this->mac = $mac;
@@ -143,6 +149,11 @@ class Record extends \DB\Record implements \LAN\Renderable
     function setHostName($name)
     {
         $this->host_name = $name;
+    }
+
+    function setSteamID64($id)
+    {
+        $this->steam_id_64 = $id;
     }
 
     function render()

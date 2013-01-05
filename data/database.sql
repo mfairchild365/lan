@@ -17,6 +17,7 @@ CREATE  TABLE IF NOT EXISTS `lan`.`users` (
   `ip` VARCHAR(32) NOT NULL ,
   `mac` VARCHAR(32) NOT NULL ,
   `host_name` VARCHAR(256) NULL ,
+  `steam_id_64` VARCHAR(256) NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `mac` (`mac` ASC) ,
   INDEX `date_edited` (`date_edited` ASC) ,
