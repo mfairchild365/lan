@@ -6,8 +6,6 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
 } else {
     require dirname(dirname(__FILE__)) . '/config.sample.php';
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -84,7 +82,13 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
                     <fieldset>
                         <legend>Edit Profile</legend>
                         <label for="edit-name">
+                            Yo' Name:<br />
                             <input type="text" id="edit-name" />
+                        </label>
+
+                        <label for="edit-steam">
+                            Steam Profile URL (to link your account to steam).<br />
+                            <input type="text" id="edit-steam" />
                         </label>
                     </fieldset>
                 </form>

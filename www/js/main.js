@@ -341,6 +341,12 @@ var app = {
             return;
         }
 
+        var steam = $('#edit-steam').val();
+
+        if (steam != '') {
+            app.user.steam = steam;
+        }
+
         app.user.name = name;
 
         app.send('UPDATE_USER', app.user);

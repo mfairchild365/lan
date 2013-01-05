@@ -113,7 +113,7 @@ class Record extends \DB\Record implements \LAN\Renderable
 
     function getSteamID64()
     {
-        return  $this->steam_id_64;
+        return $this->steam_id_64;
     }
 
     function setMAC($mac)

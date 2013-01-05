@@ -17,7 +17,17 @@ class Profiles {
         if (!\LAN\Config::get('STEAM_API_KEY')) {
             return '[]';
         }
-        $ids = array('76561197990996324');
+
+        $ids = array();
+
+        foreach (\LAN\User\RecordList::getAllOnline() as $user) {
+            $id = $user->getSteamID64();
+            if (empty($id)) {
+                continue;
+            }
+
+            $ids[] = $id;
+        }
 
         $file = \LAN\Config::get('CACHE_DIR') . self::FILE_NAME;
 
