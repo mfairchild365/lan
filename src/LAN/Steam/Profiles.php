@@ -29,6 +29,10 @@ class Profiles {
             $ids[] = $id;
         }
 
+        if (empty($ids)) {
+            return '[]';
+        }
+
         $file = \LAN\Config::get('CACHE_DIR') . self::FILE_NAME;
 
         if (file_exists($file) && (filemtime($file) + \LAN\Config::get('STEAM_CACHE_TIMEOUT_PROFILES') > time())) {
