@@ -127,6 +127,9 @@ var app = {
         $("#connection-status").html("Online");
 
         $("#message").removeAttr('disabled');
+
+        //retrieve steam stuff
+        app.send('GET_STEAM_PROFILES');
     },
 
     onMessage: function(event)
@@ -274,7 +277,45 @@ var app = {
 
     onSteamProfiles: function(data)
     {
+        if (data.response.players == undefined) {
+            return;
+        }
+
         console.log(data);
+
+        for (id in data.response.players) {
+            var profile = data.response.players[id];
+            var steamId = data.response.players[id].steamid;
+
+            var userId = app.getUserIdBySteamId(steamId);
+
+            if (!userId) {
+                continue;
+            }
+
+            $('.steam-image-' + userId).html("<img src='" + profile.avatar + "' />");
+
+            $('.steam-name-' + userId).html("<a href='" + profile.profileurl + "' target='_new'>" + profile.personaname  + "</a>");
+
+            if (profile.gameextrainfo != undefined) {
+                $('.steam-game-' + userId).html("Now Playing: <a href='steam://run/" + profile.gameid + "'>" + profile.gameextrainfo + "</a>");
+            } else {
+                $('.steam-game-' + userId).html('');
+            }
+
+            console.log(userId);
+        }
+    },
+
+    getUserIdBySteamId: function(steamId)
+    {
+        for (id in app.users) {
+            if (app.users[id].steam_id_64 == steamId) {
+                return id;
+            }
+        }
+
+        return false;
     },
 
     addUser: function(user)
@@ -288,9 +329,9 @@ var app = {
 
         var html = "<li id='" + elementId + "'>" +
                        "<ul>" +
-                            "<li><span class='user-name'>" + user['name'] + "</span></li>" +
-                            "<li><span class='user-ip'>" + user['ip'] + "</span></li>" +
-                            "<li><span class='user-host'>" + user['host_name'] + "</span></li>" +
+                            "<li><span class='steam-image-" + user['id'] + "'></span> <span class='user-name'>" + user['name'] + "</span> <span class='steam-name-" + user['id'] + "'></span></li>" +
+                            "<li>Host: <span class='user-host'>" + user['host_name'] + "</span> (<span class='user-ip'>" + user['ip'] + "</span>)</li>" +
+                            "<li><span class='steam-game-" + user['id'] + "'></span></li>" +
                         "</ul>" +
                    "</li>";
 
