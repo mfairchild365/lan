@@ -110,6 +110,14 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
                 </div>
             </div>
         </div>
+
+        <div id='footer'>
+            <div class='pull-right'>
+                <a href='https://github.com/mfairchild365/lan' target='_new'>Fork on Github</a> |
+                <a href='http://steampowered.com' target='_new'>Powered by Steam</a>
+            </div>
+        </div>
     </div>
+
 </body>
 </html>
