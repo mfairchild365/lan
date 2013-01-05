@@ -95,6 +95,8 @@ var app = {
         });
 
         app.timeLoop = setInterval('app.updateMessageTimes()', 1000);
+
+        app.timeLoop = setInterval("app.send('GET_STEAM_PROFILES')", 5000);
     },
 
     /**
@@ -107,6 +109,11 @@ var app = {
         data = { };
 
         data['action'] = action;
+
+        if (object == undefined) {
+            object = [];
+        }
+
         data['data']   = object;
 
         app.connection.send(JSON.stringify(data));
@@ -147,6 +154,9 @@ var app = {
                 break;
             case 'MESSAGE_NEW':
                 app.onNewMessage(data['data']);
+                break;
+            case 'STEAM_PROFILES':
+                app.onSteamProfiles(JSON.parse(data['data']));
                 break;
         }
     },
@@ -260,6 +270,11 @@ var app = {
 
             app.notifications.push(notification);
         }
+    },
+
+    onSteamProfiles: function(data)
+    {
+        console.log(data);
     },
 
     addUser: function(user)

@@ -14,6 +14,9 @@ class Profiles {
     public static function getJSON()
     {
 
+        if (!\LAN\Config::get('STEAM_API_KEY')) {
+            return '[]';
+        }
         $ids = array('76561197990996324');
 
         $file = \LAN\Config::get('CACHE_DIR') . self::FILE_NAME;
@@ -24,11 +27,13 @@ class Profiles {
 
         $requestUrl = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?steamids='.implode(',', $ids).'&format=json&key='.\LAN\Config::get('STEAM_API_KEY');
 
-        $data = @file_get_contents($requestUrl);
+        if (!$json = @file_get_contents($requestUrl)) {
+            throw new \LAN\Exception('Could not retrieve steam profiles json');
+        }
 
-        file_put_contents($file, $data);
+        file_put_contents($file, $json);
 
-        return $data;
+        return $json;
     }
 
 }

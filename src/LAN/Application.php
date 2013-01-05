@@ -67,6 +67,9 @@ class Application implements MessageComponentInterface {
             case 'SEND_CHAT_MESSAGE':
                 $class = '\LAN\Message\ActionHandler';
                 break;
+            case 'GET_STEAM_PROFILES':
+                $class = '\LAN\Steam\ActionHandler';
+                break;
             default:
                 throw new Exception("Unknown action submitted by client", 400);
         }
@@ -183,7 +186,7 @@ class Application implements MessageComponentInterface {
      */
     public static function sendMessageToClient(\Ratchet\ConnectionInterface $connection, $action, $data)
     {
-        if(!in_array($action, array('USER_INFORMATION', 'USER_CONNECTED', 'USER_DISCONNECTED', 'MESSAGE_NEW', 'ERROR', 'USER_UPDATED'))) {
+        if(!in_array($action, array('USER_INFORMATION', 'USER_CONNECTED', 'USER_DISCONNECTED', 'MESSAGE_NEW', 'ERROR', 'USER_UPDATED', 'STEAM_PROFILES'))) {
             throw new Exception("Unknown Action Type: " . $action);
         }
 
