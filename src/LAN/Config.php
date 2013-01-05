@@ -1,9 +1,6 @@
 <?php
 namespace LAN;
-Config::set('DB_HOST'     , 'localhost');
-Config::set('DB_USER'     , 'user');
-Config::set('DB_PASSWORD' , 'password');
-Config::set('DB_NAME'     , 'lan');
+
 class Config
 {
     protected static $data = array(
