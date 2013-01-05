@@ -281,8 +281,6 @@ var app = {
             return;
         }
 
-        console.log(data);
-
         for (id in data.response.players) {
             var profile = data.response.players[id];
             var steamId = data.response.players[id].steamid;
@@ -302,8 +300,6 @@ var app = {
             } else {
                 $('.steam-game-' + userId).html('');
             }
-
-            console.log(userId);
         }
     },
 
