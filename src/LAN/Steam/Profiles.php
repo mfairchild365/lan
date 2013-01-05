@@ -11,7 +11,7 @@ class Profiles {
         //singleton
     }
 
-    public static function getJSON()
+    public static function getJSON($cacheOnly = true)
     {
 
         if (!\LAN\Config::get('STEAM_API_KEY')) {
@@ -35,8 +35,16 @@ class Profiles {
 
         $file = \LAN\Config::get('CACHE_DIR') . self::FILE_NAME;
 
-        if (file_exists($file) && (filemtime($file) + \LAN\Config::get('STEAM_CACHE_TIMEOUT_PROFILES') > time())) {
+        if (file_exists($file) && (filemtime($file) + \LAN\Config::get('STEAM_CACHE_TIMEOUT_PROFILES') > time())) {echo "here";
             return file_get_contents($file);
+        }
+
+        if ($cacheOnly && file_exists($file)) {
+            return file_get_contents($file);
+        }
+
+        if ($cacheOnly) {
+            return '[]';
         }
 
         $requestUrl = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?steamids='.implode(',', $ids).'&format=json&key='.\LAN\Config::get('STEAM_API_KEY');
