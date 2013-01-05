@@ -293,7 +293,7 @@ var app = {
 
             $('.steam-image-' + userId).html("<img src='" + profile.avatar + "' />");
 
-            $('.steam-name-' + userId).html("<a href='" + profile.profileurl + "' target='_new'>" + profile.personaname  + "</a>");
+            $('.steam-name-' + userId).html("<a href='steam://url/SteamIDPage/" + steamId + "'>" + profile.personaname  + "</a>");
 
             if (profile.gameextrainfo != undefined) {
                 $('.steam-game-' + userId).html("Now Playing: <a href='steam://run/" + profile.gameid + "'>" + profile.gameextrainfo + "</a>");
