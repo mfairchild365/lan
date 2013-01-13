@@ -39,3 +39,16 @@ Setup
 4. Complete the config.inc.php file
 5. Install the database schema: From a command line interface run 'php scripts/install.php'
 6. To run the server, run: 'php bin/server.php'
+
+Set up as a daemon (auto start, run in background)
+------------------
+This is up to you.  However, I got it working just fine with supervisord.
+1. Install and configure supervisord using this tutorial: http://edvanbeinum.com/how-to-install-and-configure-supervisord
+2. For the command, enter something like `command=php /var/www/lan/bin/server.php`
+
+Some helpful commands for supervisord include:
+ ```
+ #supervisorctl status
+ # supervisorctl start yourscriptname
+ # supervisorctl stop yourscriptname
+ ```
