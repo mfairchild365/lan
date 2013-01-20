@@ -19,6 +19,7 @@ class Application implements MessageComponentInterface {
         //Set as online.
         $user = $this->connections[$connection->resourceId]->getUser();
         $user->setStatus("ONLINE");
+        $user->setIP($connection->remoteAddress);
         $user->save();
 
         //Display connection on server.
