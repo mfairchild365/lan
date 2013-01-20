@@ -207,6 +207,8 @@ var app = {
     {
         app.user = data['LAN\\User\\Record'];
 
+        $.cookie('lan', app.user['id'], { path: '/' });
+
         if (app.user.name == "UNKNOWN") {
             $('#edit-profile-modal').modal();
         }
@@ -376,12 +378,6 @@ var app = {
             $('#edit-profile-alert').show();
             $('#edit-profile-alert').alert();
             return;
-        }
-
-        var steam = $('#edit-steam').val();
-
-        if (steam != '') {
-            app.user.steam = steam;
         }
 
         app.user.name = name;

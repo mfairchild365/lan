@@ -17,6 +17,7 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
     <link href="<?php echo Util::getURL();?>css/main.css" rel="stylesheet" media="screen">
 
     <script src="<?php echo Util::getURL();?>js/jquery.min.js"></script>
+    <script src="<?php echo Util::getURL();?>js/jquery.cookie.js"></script>
     <script src="<?php echo Util::getURL();?>js/bootstrap.min.js"></script>
     <script src="<?php echo Util::getURL();?>js/moment.min.js"></script>
     <script src="<?php echo Util::getURL();?>js/main.js"></script>
@@ -86,10 +87,7 @@ if (file_exists(dirname(dirname(__FILE__)) . '/config.inc.php')) {
                             <input type="text" id="edit-name" />
                         </label>
 
-                        <label for="edit-steam">
-                            Steam Profile URL (to link your account to steam).<br />
-                            <input type="text" id="edit-steam" />
-                        </label>
+                        <a href='<?php echo \LAN\Util::getURL() . 'auth.php'?>'><img src="<?php echo \LAN\Util::getURL() . 'img/steam.png'?>" width="118" height="51" border="0"></a>
                     </fieldset>
                 </form>
             </div>
