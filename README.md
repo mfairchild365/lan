@@ -27,6 +27,7 @@ Long term goals
 Requirements
 ------------
 * php5.3 or greater (5.4 prefered)
+* CURL extension must be installed for PHP
 * Mysql
 * Server that can host the application locally
 * Unix based server. (MAC os X will require that you set the server IP manually in the config file)
