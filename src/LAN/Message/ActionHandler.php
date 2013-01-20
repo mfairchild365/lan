@@ -6,7 +6,7 @@ class ActionHandler implements \LAN\ActionHandlerInterface
     public function handle($action, $data, \LAN\ConnectionContainer $editor)
     {
 
-        $message = nl2br(trim($data));
+        $message = nl2br(trim(strip_tags($data)));
 
         if ($message == '') {
             return;
