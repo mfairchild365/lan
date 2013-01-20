@@ -52,6 +52,14 @@ class Util
     }
 
     /**
+     * Connect using default settings
+     */
+    public static function connectDB()
+    {
+        self::setDB(Config::get('DB_HOST'), Config::get('DB_USER'), Config::get('DB_PASSWORD'), Config::get('DB_NAME'));
+    }
+
+    /**
      * Connect to the database and return it
      *
      * @throws \Exception
