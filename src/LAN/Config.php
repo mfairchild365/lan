@@ -20,7 +20,7 @@ class Config
 
         //STEAM SETTINGS
         'STEAM_API_KEY'            => false,  //Your steam cache key
-        'STEAM_CACHE_TTL_PROFILES' => 10,     //Time to live in seconds for cache files
+        'STEAM_CACHE_TTL_PROFILES' => 5,     //Time to live in seconds for cache files
     );
 
     private function __construct()
