@@ -5,7 +5,7 @@ use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 
 class Application implements MessageComponentInterface {
-    protected $connections = array();
+    public static $connections = array();
 
     public function __construct()
     {
@@ -14,41 +14,41 @@ class Application implements MessageComponentInterface {
 
     public function onOpen(ConnectionInterface $connection) {
         //Save in array
-        $this->connections[$connection->resourceId] = new ConnectionContainer($connection);
+        self::$connections[$connection->resourceId] = new ConnectionContainer($connection);
 
         //Set as online.
-        $user = $this->connections[$connection->resourceId]->getUser();
+        $user = self::$connections[$connection->resourceId]->getUser();
         $user->setStatus("ONLINE");
         $user->setIP($connection->remoteAddress);
         $user->save();
 
         //Display connection on server.
         echo "--------NEW CONNECTION--------" . PHP_EOL;
-        echo "ID  : " . $this->connections[$connection->resourceId]->getConnection()->resourceId . PHP_EOL;
+        echo "ID  : " . self::$connections[$connection->resourceId]->getConnection()->resourceId . PHP_EOL;
         echo "IP  : " . $user->getIP() . PHP_EOL;
         echo "MAC : " . $user->getMAC() . PHP_EOL;
 
         //Update the client's list with all users currently online.
         foreach (User\RecordList::getAll() as $data) {
-            $this->connections[$connection->resourceId]->send('USER_CONNECTED', $data);
+            self::$connections[$connection->resourceId]->send('USER_CONNECTED', $data);
         }
 
         //Send the client information about the logged in user
-        $this->connections[$connection->resourceId]->send('USER_INFORMATION', $user);
+        self::$connections[$connection->resourceId]->send('USER_INFORMATION', $user);
 
         //Tell everyone else that this guy just came online.
         if ($this->getUserConnectionCount($user->getID()) == 1) {
-            $this->sendToAll("USER_CONNECTED", $user);
+            self::sendToAll("USER_CONNECTED", $user);
         }
 
         //Get the user up to date on the conversation
         foreach (Message\RecordList::getAllMessages() as $message) {
-            $this->connections[$connection->resourceId]->send('MESSAGE_NEW', $message);
+            self::$connections[$connection->resourceId]->send('MESSAGE_NEW', $message);
         }
     }
 
     public function onMessage(ConnectionInterface $connection, $msg) {
-        $user = $this->connections[$connection->resourceId]->getUser();
+        $user = self::$connections[$connection->resourceId]->getUser();
         
         echo "--------ACTION--------" . PHP_EOL;
         echo "IP  : " . $user->getIP() . PHP_EOL;
@@ -77,24 +77,24 @@ class Application implements MessageComponentInterface {
 
         $handler = new $class;
 
-        $result = $handler->handle($data['action'], $data['data'], $this->connections[$connection->resourceId]);
+        $result = $handler->handle($data['action'], $data['data'], self::$connections[$connection->resourceId]);
 
         if ($result) {
-            $this->sendToAll($result['action'], $result['data']);
+            self::sendToAll($result['action'], $result['data']);
         }
     }
 
     public function onClose(ConnectionInterface $connection) {
-        $user = $this->connections[$connection->resourceId]->getUser();
+        $user = self::$connections[$connection->resourceId]->getUser();
         
         echo "--------CONNECTION CLOSED--------" . PHP_EOL;
         
         //May not be a set connection if an error happened during connection.
-        if (isset($this->connections[$connection->resourceId])) {
+        if (isset(self::$connections[$connection->resourceId])) {
             echo "IP  : " . $user->getIP() . PHP_EOL;
 
             if ($this->getUserConnectionCount($user->getID()) == 1) {
-                $this->sendToAll("USER_DISCONNECTED", $user);
+                self::sendToAll("USER_DISCONNECTED", $user);
             }
 
             //Set as offline
@@ -102,21 +102,21 @@ class Application implements MessageComponentInterface {
             $user->save();
         }
 
-        $connection = $this->connections[$connection->resourceId];
+        $connection = self::$connections[$connection->resourceId];
 
         // The connection is closed, remove it, as we can no longer send it messages
-        unset($this->connections[$connection->getConnection()->resourceId]);
+        unset(self::$connections[$connection->getConnection()->resourceId]);
 
-        $this->sendToAll("USER_DISCONNECTED", $user);
+        self::sendToAll("USER_DISCONNECTED", $user);
     }
 
     public function onError(ConnectionInterface $connection, \Exception $e) {
-        $user = $this->connections[$connection->resourceId]->getUser();
+        $user = self::$connections[$connection->resourceId]->getUser();
         
         echo "--------ERROR--------" . PHP_EOL;
 
         //May not be a set connection if an error happened during connection.
-        if (isset($this->connections[$connection->resourceId])) {
+        if (isset(self::$connections[$connection->resourceId])) {
             echo "IP  : " . $user->getIP() . PHP_EOL;
         }
 
@@ -129,9 +129,9 @@ class Application implements MessageComponentInterface {
         $connection->close();
     }
 
-    public function sendToAll($action, $data)
+    public static function sendToAll($action, $data)
     {
-        foreach ($this->connections as $connection) {
+        foreach (self::$connections as $connection) {
             $connection->send($action, $data);
         }
     }
@@ -140,7 +140,7 @@ class Application implements MessageComponentInterface {
     {
         $count = 0;
 
-        foreach ($this->connections as $connection) {
+        foreach (self::$connections as $connection) {
             if ($connection->getUser()->getID() == $userID) {
                 $count++;
             }
