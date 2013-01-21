@@ -95,8 +95,6 @@ var app = {
         });
 
         app.timeLoop = setInterval('app.updateMessageTimes()', 1000);
-
-        app.timeLoop = setInterval("app.send('GET_STEAM_PROFILES')", 5000);
     },
 
     /**
@@ -127,9 +125,6 @@ var app = {
         $("#connection-status").html("Online");
 
         $("#message").removeAttr('disabled');
-
-        //retrieve steam stuff
-        app.send('GET_STEAM_PROFILES');
     },
 
     onMessage: function(event)
